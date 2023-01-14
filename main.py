@@ -19,6 +19,7 @@ def main():
     target_repo = token.get_repo(TARGET_REPO)
     #owner = get_repo_owner()
     owner = target_repo.owner.name
+    print(f'OWNER={owner}')
     data = read_testdata(owner)
     json_data = json.dumps(data)
     write_testdata(json_data, target_repo)
