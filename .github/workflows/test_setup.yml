@@ -1,0 +1,30 @@
+name: setup test data
+on:
+  workflow_dispatch:
+
+env:
+  DEVOPS_DIR: devops
+  GHSECRET: ${{ secrets.GITHUB_TOKEN }}
+  TARGET_REPO: ${{ github.repository }}
+  SCRIPT_REPO: BZZ-Commons/set-testdata
+  DATA_PATH: 'FIXME url'
+
+jobs:
+  copy-testdata:
+    permissions: write-all
+    name: Setup test data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyGithub
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Check-out the TestData Repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.SCRIPT_REPO }}
+          path: ${{ env.DEVOPS_DIR }}
+      - name: Copy the test data
+        run: python ${{ env.DEVOPS_DIR }}/main.py
+        shell: sh
