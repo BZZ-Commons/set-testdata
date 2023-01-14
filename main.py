@@ -15,10 +15,13 @@ def main():
     main controller
     :return:
     """
-    owner = get_repo_owner()
+    token = Github(GITHUB_SECRET)
+    target_repo = token.get_repo(TARGET_REPO)
+    #owner = get_repo_owner()
+    owner = target_repo.owner.name
     data = read_testdata(owner)
     json_data = json.dumps(data)
-    write_testdata(json_data)
+    write_testdata(json_data, target_repo)
 
 
 def read_testdata(owner):
@@ -50,14 +53,14 @@ def get_repo_owner():
     return owner
 
 
-def write_testdata(json_data):
+def write_testdata(json_data, target_repo):
     """
     writes the json file with test data to the target repo
-    :param json_data:
+    :param json_data: the json-data to be written
+    :param target_repo: Repository-object
     :return:
     """
-    token = Github(GITHUB_SECRET)
-    target_repo = token.get_repo(TARGET_REPO)
+
     try:
         existing_data = target_repo.get_contents('testdata.json')
         target_repo.update_file(
