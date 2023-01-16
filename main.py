@@ -37,12 +37,14 @@ def read_testdata(owner):
             return row
     raise ValueError(f'The owner "{owner}" of this repository is unknown')
 
+
 def get_repo_owner():
     """
     gets the owner from the repo name
     :return:
     """
-    parts = TARGET_REPO.split('-',1)
+    parts = TARGET_REPO.split('-', 1)
+    print(parts)
     return parts[1]
 
 
