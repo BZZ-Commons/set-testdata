@@ -18,7 +18,6 @@ def main():
     token = Github(GITHUB_SECRET)
     target_repo = token.get_repo(TARGET_REPO)
     owner = get_repo_owner()
-    print(f'OWNER={owner}')
     data = read_testdata(owner)
     json_data = json.dumps(data)
     write_testdata(json_data, target_repo)
@@ -36,21 +35,15 @@ def read_testdata(owner):
     for row in csv_reader_object:
         if row['userid'] == owner:
             return row
-    raise ValueError('The owner of this repository is unknown')
+    raise ValueError(f'The owner "{owner}" of this repository is unknown')
 
 def get_repo_owner():
     """
     gets the owner from the repo name
     :return:
     """
-    parts = TARGET_REPO.split('-')
-    parts.pop(0)
-    if parts[-1] == 'bzz':
-        owner = parts[-2] + '-' + parts[-1]
-    else:
-        owner = parts[-1]
-    print(f'Owner={owner}')
-    return owner
+    parts = TARGET_REPO.split('-',1)
+    return parts[1]
 
 
 def write_testdata(json_data, target_repo):
