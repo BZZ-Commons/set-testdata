@@ -43,10 +43,11 @@ def get_repo_owner():
     gets the owner from the repo name
     :return:
     """
+    print(f'TARGET_REPO={TARGET_REPO}')
     repo_name = TARGET_REPO.split('/')[-1]
-    print(repo_name)
+    print(f'repo_name={repo_name}')
     parts = TARGET_REPO.split('-', 1)
-    print(parts)
+    print(f'parts={parts}')
     return parts[1]
 
 
