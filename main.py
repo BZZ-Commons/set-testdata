@@ -8,6 +8,7 @@ from github import Github, UnknownObjectException  # needs PyGitHub
 GITHUB_SECRET = os.environ['GHSECRET']
 TARGET_REPO = os.getenv('TARGET_REPO')
 DATA_PATH = os.environ['DATA_PATH']
+TEMPLATE_REPO = os.environ['TEMPLATE_REPO']
 
 
 def main():
@@ -44,11 +45,10 @@ def get_repo_owner():
     :return:
     """
     print(f'TARGET_REPO={TARGET_REPO}')
-    repo_name = TARGET_REPO.split('/')[-1]
-    print(f'repo_name={repo_name}')
-    parts = repo_name.split('-', 1)
-    print(f'parts={parts}')
-    return parts[1]
+    template = TEMPLATE_REPO + '-'
+    owner = TARGET_REPO.replace(template, '')
+    print (owner)
+    return owner
 
 
 def write_testdata(json_data, target_repo):
