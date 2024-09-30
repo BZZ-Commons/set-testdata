@@ -10,7 +10,7 @@ env:
   USERNAME: ${{ github.actor }}
 
 jobs:
-  setup:
+  copy-files:
     permissions: write-all
     # copying the files for an exam
     runs-on: ubuntu-latest

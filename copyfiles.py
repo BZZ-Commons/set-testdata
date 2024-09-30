@@ -14,6 +14,7 @@ ASSETS_PATH = 'https://it.bzz.ch/assets/'
 
 
 def main():
+    print(f'TARGET_REPO={TARGET_REPO}')
     hash = create_hash()
     files = read_filenames(USER_REPO)
     token = Github(GITHUB_TOKEN)
@@ -21,15 +22,15 @@ def main():
     target_repo = token.get_repo(TARGET_REPO)
     for file in files:
         try:
-            target_repo.get_contents(f'{file}.py')
-            print (f'{file}.py already exists')
+            target_repo.get_contents(f'{file}')
+            print (f'{file} already exists')
             existing = True
         except UnknownObjectException as e:
             existing = False
         if not existing:
             contents = read_template(file, hash)
             target_repo.create_file(
-                path=f'{file}.py',
+                path=f'{file}',
                 message='create class',
                 content=contents
     )
