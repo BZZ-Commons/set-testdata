@@ -18,7 +18,7 @@ def main():
     print(f'USER_REPO={USER_REPO}')
     print(f'USERNAME={USERNAME}')
 
-    assignment_name = TARGET_REPO.replace(f'-{USERNAME}', '')
+    assignment_name = extract_repo_name()
     print(f'assignment_name={assignment_name}')
     hash = create_hash()
     files = read_filenames(assignment_name)
@@ -40,6 +40,12 @@ def main():
                 content=contents
     )
 
+def extract_repo_name():
+    foo = TARGET_REPO.split('/')[1]
+    print(f'foo={foo}')
+    bar = foo.replace(f'-{USERNAME}', '')
+    print(f'bar={bar}')
+    return foo
 
 def read_template(filename, repo_template, hash):
     try:
