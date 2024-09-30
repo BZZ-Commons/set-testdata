@@ -8,7 +8,7 @@ GITHUB_TOKEN = os.environ['GH_TOKEN']
 TARGET_REPO = os.environ['TARGET_REPO']
 TEMPLATE_REPO = os.environ['TEMPLATE_REPO']
 FILES = os.environ['FILES']
-OWNER = os.environ['OWNER']
+USERNAME = os.environ['USERNAME']
 
 def main():
     hash = create_hash()
@@ -25,7 +25,7 @@ def main():
         )
 
 def create_hash():
-    hash = hashlib.sha256(OWNER.encode()).hexdigest()
+    hash = hashlib.sha256(USERNAME.encode()).hexdigest()
     print(hash)
     return hash[:8]
 
