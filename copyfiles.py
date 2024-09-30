@@ -15,6 +15,9 @@ ASSETS_PATH = 'https://it.bzz.ch/assets/'
 
 def main():
     print(f'TARGET_REPO={TARGET_REPO}')
+    print(f'USER_REPO={USER_REPO}')
+    print(f'USERNAME={USERNAME}')
+
     hash = create_hash()
     files = read_filenames(USER_REPO)
     token = Github(GITHUB_TOKEN)
@@ -38,7 +41,7 @@ def main():
 
 def read_template(filename, hash):
     try:
-        response = urlopen(f'{ASSETS_PATH}{filename}.csv')
+        response = urlopen(f'{ASSETS_PATH}{filename}')
         template = ''
         for line in response.readlines():
             template += line.decode('utf-8')
