@@ -6,7 +6,6 @@ env:
   DEVOPS_DIR: devops
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   TARGET_REPO: ${{ github.repository }}
-  USER_REPO: "m320-lb01-a01-lantern"
   USERNAME: ${{ github.actor }}
 
 jobs:

@@ -8,16 +8,11 @@ from github import Github, UnknownObjectException  # needs PyGitHub
 
 GITHUB_TOKEN = os.environ['GH_TOKEN']
 TARGET_REPO = os.environ['TARGET_REPO']
-USER_REPO = os.environ['USER_REPO']
 USERNAME = os.environ['USERNAME']
 ASSETS_PATH = 'https://it.bzz.ch/assets/'
 
 
 def main():
-    print(f'TARGET_REPO={TARGET_REPO}')
-    print(f'USER_REPO={USER_REPO}')
-    print(f'USERNAME={USERNAME}')
-
     assignment_name = extract_repo_name()
     print(f'assignment_name={assignment_name}')
     hash = create_hash()
@@ -28,7 +23,7 @@ def main():
     for file in files:
         try:
             target_repo.get_contents(f'{file}')
-            print (f'{file} already exists')
+            print(f'{file} already exists')
             existing = True
         except UnknownObjectException as e:
             existing = False
@@ -38,14 +33,16 @@ def main():
                 path=f'{file}',
                 message='create class',
                 content=contents
-    )
+            )
+
 
 def extract_repo_name():
     foo = TARGET_REPO.split('/')[1]
     print(f'foo={foo}')
     bar = foo.replace(f'-{USERNAME}', '')
     print(f'bar={bar}')
-    return foo
+    return bar
+
 
 def read_template(filename, repo_template, hash):
     try:
@@ -54,9 +51,10 @@ def read_template(filename, repo_template, hash):
         for line in response.readlines():
             template += line.decode('utf-8')
     except HTTPError as e:
-        print (f'The file "{filename}" is unknown')
-        template = f'""" Provides the class "{filename}" \t\t{hash}"""\n\nclass {filename}():\n    pass\n'
+        print(f'The file "{filename}" is unknown')
+        template = f'""" Provides the class "{filename}" \t\t{hash}"""\n\nclass TODO:\n    pass\n'
     return template.replace('{{HASH}}', hash)
+
 
 def read_filenames(repo_template):
     path = f'{ASSETS_PATH}{repo_template}'
@@ -69,6 +67,7 @@ def read_filenames(repo_template):
         filename = filename.replace('"', '')
         filelist.append(filename)
     return filelist
+
 
 def create_hash():
     hash = hashlib.sha256(USERNAME.encode()).hexdigest()
