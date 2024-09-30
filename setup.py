@@ -3,6 +3,7 @@ import os
 
 from github import Github, UnknownObjectException  # needs PyGitHub
 
+
 GITHUB_TOKEN = os.environ['GH_TOKEN']
 TARGET_REPO = os.environ['TARGET_REPO']
 TEMPLATE_REPO = os.environ['TEMPLATE_REPO']
@@ -13,6 +14,7 @@ def main():
     hash = create_hash()
     files = FILES.split(',')
     token = Github(GITHUB_TOKEN)
+
     target_repo = token.get_repo(TARGET_REPO)
     for file in files:
         contents = f'""" Provides the class "{file}"\t{hash} """\nclass {file}:\n\tpass'
