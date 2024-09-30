@@ -1,0 +1,39 @@
+name: GitHub Classroom exam setup
+
+on: [workflow_dispatch, workflow_call]
+
+env:
+  DEVOPS_DIR: devops
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TARGET_REPO: ${{ github.repository }}
+  USER_REPO: "m320-lb01-a01-lantern"
+  USERNAME: ${{ github.actor }}
+
+jobs:
+  setup:
+    permissions: write-all
+    # copying the files for an exam
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout student repo
+        uses: actions/checkout@v4
+
+      - name: Checkout set-testdata repo
+        uses: actions/checkout@v4
+        with:
+          repository: BZZ-Commons/set-testdata
+          path: copyfiles
+          ref: master
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+          if [ -f ./setup/requirements.txt ]; then pip3 install -r ./setup/requirements.txt; fi
+      - name: Run Setup
+        run: python3 ./copyfiles/copyfiles.py

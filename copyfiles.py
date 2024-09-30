@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 from urllib.error import HTTPError
 from urllib.request import urlopen
 
@@ -7,14 +8,14 @@ from github import Github, UnknownObjectException  # needs PyGitHub
 
 GITHUB_TOKEN = os.environ['GH_TOKEN']
 TARGET_REPO = os.environ['TARGET_REPO']
-TEMPLATE_PATH = os.environ['TEMPLATE_PATH']
-FILES = os.environ['FILES']
+USER_REPO = os.environ['USER_REPO']
 USERNAME = os.environ['USERNAME']
+ASSETS_PATH = 'https://it.bzz.ch/assets/'
 
 
 def main():
     hash = create_hash()
-    files = FILES.split(',')
+    files = read_filenames(USER_REPO)
     token = Github(GITHUB_TOKEN)
 
     target_repo = token.get_repo(TARGET_REPO)
@@ -36,7 +37,7 @@ def main():
 
 def read_template(filename, hash):
     try:
-        response = urlopen(f'{TEMPLATE_PATH}{filename}.csv')
+        response = urlopen(f'{ASSETS_PATH}{filename}.csv')
         template = ''
         for line in response.readlines():
             template += line.decode('utf-8')
@@ -45,6 +46,17 @@ def read_template(filename, hash):
         template = f'""" Provides the class "{filename}" \t\t{hash}"""\n\nclass {filename}():\n    pass\n'
     return template.replace('{{HASH}}', hash)
 
+def read_filenames(repo_template):
+    path = f'https://it.bzz.ch/assets/{repo_template}'
+    urlpath = urlopen(path)
+    output = urlpath.read().decode('utf-8')
+    pattern = re.compile('\w*.py"')
+    onlyfiles = pattern.findall(output)
+    filelist = []
+    for filename in onlyfiles:
+        filename = filename.replace('"', '')
+        filelist.append(filename)
+    return filelist
 
 def create_hash():
     hash = hashlib.sha256(USERNAME.encode()).hexdigest()
