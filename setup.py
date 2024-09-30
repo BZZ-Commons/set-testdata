@@ -32,12 +32,14 @@ def main():
 
 
 def read_template(filename, hash):
-    print (f'{TEMPLATE_PATH}{filename}.csv')
-    response = urlopen(f'{TEMPLATE_PATH}{filename}.csv')
-    template = ''
-    for line in response.readlines():
-        template += line.decode('utf-8')
-
+    try:
+        response = urlopen(f'{TEMPLATE_PATH}{filename}.csv')
+        template = ''
+        for line in response.readlines():
+            template += line.decode('utf-8')
+    except UnknownObjectException as e:
+        print (f'The file "{filename}" is unknown')
+        template = f'""" Provides the class "{filename}" \t\t{hash}"""\n\nclass {filename}():\n    pass\n'
     return template.replace('{{HASH}}', hash)
 
 
