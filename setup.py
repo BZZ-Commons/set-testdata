@@ -32,6 +32,7 @@ def main():
 
 
 def read_template(filename, hash):
+    print (f'{TEMPLATE_PATH}{filename}.csv')
     response = urlopen(f'{TEMPLATE_PATH}{filename}.csv')
     template = ''
     for line in response.readlines():
