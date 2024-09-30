@@ -18,6 +18,8 @@ def main():
     print(f'USER_REPO={USER_REPO}')
     print(f'USERNAME={USERNAME}')
 
+    assignment_name = TARGET_REPO.replace(f'-{USERNAME}', '')
+    print(f'assignment_name={assignment_name}')
     hash = create_hash()
     files = read_filenames(USER_REPO)
     token = Github(GITHUB_TOKEN)
@@ -31,7 +33,7 @@ def main():
         except UnknownObjectException as e:
             existing = False
         if not existing:
-            contents = read_template(file, hash)
+            contents = read_template(file, USER_REPO, hash)
             target_repo.create_file(
                 path=f'{file}',
                 message='create class',
@@ -39,9 +41,9 @@ def main():
     )
 
 
-def read_template(filename, hash):
+def read_template(filename, repo_template, hash):
     try:
-        response = urlopen(f'{ASSETS_PATH}{filename}')
+        response = urlopen(f'{ASSETS_PATH}{repo_template}{filename}')
         template = ''
         for line in response.readlines():
             template += line.decode('utf-8')
@@ -51,7 +53,7 @@ def read_template(filename, hash):
     return template.replace('{{HASH}}', hash)
 
 def read_filenames(repo_template):
-    path = f'https://it.bzz.ch/assets/{repo_template}'
+    path = f'{ASSETS_PATH}{repo_template}'
     urlpath = urlopen(path)
     output = urlpath.read().decode('utf-8')
     pattern = re.compile('\w*.py"')
