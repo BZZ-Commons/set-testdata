@@ -1,5 +1,6 @@
 import hashlib
 import os
+from urllib.error import HTTPError
 from urllib.request import urlopen
 
 from github import Github, UnknownObjectException  # needs PyGitHub
@@ -39,7 +40,7 @@ def read_template(filename, hash):
         template = ''
         for line in response.readlines():
             template += line.decode('utf-8')
-    except UnknownObjectException as e:
+    except HTTPError as e:
         print (f'The file "{filename}" is unknown')
         template = f'""" Provides the class "{filename}" \t\t{hash}"""\n\nclass {filename}():\n    pass\n'
     return template.replace('{{HASH}}', hash)
