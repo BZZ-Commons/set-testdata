@@ -21,14 +21,16 @@ def main():
         try:
             target_repo.get_contents(f'{file}.py')
             print (f'{file}.py already exists')
+            existing = True
         except UnknownObjectException as e:
-
+            existing = False
+        if not existing:
             contents = read_template(file, hash)
             target_repo.create_file(
                 path=f'{file}.py',
                 message='create class',
                 content=contents
-        )
+    )
 
 
 def read_template(filename, hash):
