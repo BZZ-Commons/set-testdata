@@ -7,7 +7,6 @@ env:
   GHSECRET: ${{ secrets.GITHUB_TOKEN }}
   TARGET_REPO: ${{ github.repository }}
   SCRIPT_REPO: BZZ-Commons/set-testdata
-  DATA_PATH: 'FIXME url'
 
 jobs:
   copy-testdata:
