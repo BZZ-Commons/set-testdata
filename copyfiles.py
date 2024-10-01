@@ -37,16 +37,14 @@ def main():
 
 
 def extract_repo_name():
-    foo = TARGET_REPO.split('/')[1]
-    print(f'foo={foo}')
-    bar = foo.replace(f'-{USERNAME}', '')
-    print(f'bar={bar}')
-    return bar
+    repo_only = TARGET_REPO.split('/')[1]
+    no_user = repo_only.replace(f'-{USERNAME}', '')
+    return no_user
 
 
 def read_template(filename, repo_template, hash):
     try:
-        response = urlopen(f'{ASSETS_PATH}{repo_template}{filename}')
+        response = urlopen(f'{ASSETS_PATH}{repo_template}/{filename}')
         template = ''
         for line in response.readlines():
             template += line.decode('utf-8')
@@ -58,14 +56,17 @@ def read_template(filename, repo_template, hash):
 
 def read_filenames(repo_template):
     path = f'{ASSETS_PATH}{repo_template}'
-    urlpath = urlopen(path)
-    output = urlpath.read().decode('utf-8')
-    pattern = re.compile('\w*.py"')
-    onlyfiles = pattern.findall(output)
     filelist = []
-    for filename in onlyfiles:
-        filename = filename.replace('"', '')
-        filelist.append(filename)
+    try:
+        urlpath = urlopen(path)
+        output = urlpath.read().decode('utf-8')
+        pattern = re.compile('\w*.py"')
+        onlyfiles = pattern.findall(output)
+        for filename in onlyfiles:
+            filename = filename.replace('"', '')
+            filelist.append(filename)
+    except HTTPError as e:
+        print(f'The path "{path}" is unknown')
     return filelist
 
 
